@@ -1,13 +1,13 @@
 FROM ubuntu:24.04 AS builder
 
 ARG SRC_URL=https://public.startown.ai/packages/madgraph-3.6.6.tar.gz \
-    ARG INSTALL_DIR=/opt/madgraph
+    INSTALL_DIR=/opt/madgraph
 
 RUN apt-get update && \
     apt-get install -y curl wget python3 python3-six gnuplot make g++
 
-RUN mkdir -p ${SRC_DIR} ${BUILD_DIR} ${INSTALL_DIR} && \
-    curl -L ${SRC_URL} | tar -xz --strip=1 --directory=${SRC_DIR}
+RUN mkdir -p ${INSTALL_DIR} && \
+    curl -L ${SRC_URL} | tar -xz --strip=1 --directory=${INSTALL_DIR}
 
 COPY --from=startown/delphes:3.5.0 /opt/delphes /opt/delphes
 COPY --from=startown/emela:1.0.1 /opt/emela /opt/emela
@@ -41,10 +41,9 @@ ENV DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get update && \
     apt-get install -y \
-    python3 python3-pip python3-six python-is-python3 \
+    python3 python3-pip python3-six \
     gfortran g++ make perl gnuplot vim wget ghostscript imagemagick \
     libvdt-dev libtbb-dev libpcre3
-RUN pip3 install --upgrade setuptools --break-system-packages
 
 COPY --from=builder /opt/zlib /opt/zlib
 COPY --from=builder /opt/hepmc /opt/hepmc
