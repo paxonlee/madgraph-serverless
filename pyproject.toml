@@ -1,6 +1,6 @@
 [project]
 name = "madgraph-serverless"
-version = "0.1.5"
+version = "0.1.6"
 description = "Run MadGraph5_aMC@NLO on Runpod Serverless"
 readme = "README.md"
 requires-python = ">=3.12"

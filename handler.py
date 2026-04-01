@@ -1,19 +1,33 @@
 import os
 import sys
+import tarfile
 
 import pexpect
 import runpod
+import s3fs
+
+S3_ENDPOINT = os.getenv("CLOUDFLARE_R2_ENDPOINT")
+S3_ACCESS_KEY_ID = os.getenv("CLOUDFLARE_R2_ACCESS_KEY_ID")
+S3_ACCESS_KEY_SECRET = os.getenv("CLOUDFLARE_R2_ACCESS_KEY_SECRET")
+S3_BUCKET = "public/collisions"
 
 
 def handler(event: dict):
     job_input = event["input"]
-    job_id = event.get("id", "runpod_local_test")
 
-    commands = job_input.get("commands", [])
-    if len(commands) == 0:
+    commands = job_input.get("commands")
+    if not commands:
         return {"error": "No commands provided"}
 
-    script_path = f"{job_id}.mg5"
+    output_path = None
+    for command in commands:
+        if command.startswith("output"):
+            output_path = command.split(" ")[1]
+            break
+    if not output_path:
+        return {"error": "No output path provided"}
+
+    script_path = "commands.mg5"
     with open(script_path, "w") as f:
         f.write("\n".join(commands))
 
@@ -26,19 +40,26 @@ def handler(event: dict):
         child.logfile = sys.stdout
         child.expect(pexpect.EOF)
     except Exception as e:
-        return {"status": "failed", "error": str(e)}
+        return {"error": str(e)}
+    finally:
+        child.close()
 
-    child.close()
+    if os.path.exists(output_path):
+        archive_path = f"{output_path}.tar.gz"
+        print(f"Compressing {output_path} to {archive_path}")
+        with tarfile.open(archive_path, "w:gz") as tar:
+            tar.add(output_path, arcname=output_path)
 
-    directory_contents = os.listdir(".")
+        print(f"Uploading {archive_path} to {S3_BUCKET}/{archive_path}")
+        s3 = s3fs.S3FileSystem(
+            endpoint_url=S3_ENDPOINT,
+            access_key_id=S3_ACCESS_KEY_ID,
+            secret_access_key=S3_ACCESS_KEY_SECRET,
+            bucket_name=S3_BUCKET,
+        )
+        s3.put(archive_path, f"{S3_BUCKET}/{archive_path}")
 
-    return {
-        "status": "success",
-        "job_id": job_id,
-        "commands": commands,
-        "pwd": os.getcwd(),
-        "directory_contents": directory_contents,
-    }
+    return {"s3_path": f"{S3_BUCKET}/{archive_path}"}
 
 
 if __name__ == "__main__":
