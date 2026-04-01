@@ -1,0 +1,15 @@
+generate p p > w+ w-, w+ > j j, w- > j j
+output pp2ww_w2jj_w2jj
+launch
+shower=pythia8
+detector=delphes
+done
+set iseed 42
+set ebeam 7000
+set htjmin 300
+set htjmax 400
+set nevents 1000
+add pythia8_card Random:setSeed = on
+add pythia8_card Random:seed = 42
+add delphes_card --line_position=0 set RandomSeed 42
+done

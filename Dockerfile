@@ -1,12 +1,12 @@
-FROM python:3.10-slim
+FROM startown/madgraph:3.5.13
 
-WORKDIR /
+RUN apt-get update && \
+    apt-get install -y python3 python3-pip && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+RUN pip3 install --break-system-packages runpod pexpect
 
-# Install dependencies
-RUN pip install --no-cache-dir runpod
-
-# Copy your handler file
-COPY handler.py /
-
-# Start the container
+WORKDIR /work
+COPY handler.py handler.py
+ENTRYPOINT []
 CMD ["python3", "-u", "handler.py"]

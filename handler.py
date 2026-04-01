@@ -1,33 +1,45 @@
-import time
+import os
+import sys
 
+import pexpect
 import runpod
 
 
-def handler(event):
-    #   This function processes incoming requests to your Serverless endpoint.
-    #
-    #    Args:
-    #        event (dict): Contains the input data and request metadata
-    #
-    #    Returns:
-    #       Any: The result to be returned to the client
+def handler(event: dict):
+    job_input = event["input"]
+    job_id = event.get("id", "runpod_local_test")
 
-    # Extract input data
-    print("Worker Start")
-    input = event["input"]
+    commands = job_input.get("commands", [])
+    if len(commands) == 0:
+        return {"error": "No commands provided"}
 
-    prompt = input.get("prompt")
-    seconds = input.get("seconds", 0)
+    script_path = f"{job_id}.mg5"
+    with open(script_path, "w") as f:
+        f.write("\n".join(commands))
 
-    print(f"Received prompt: {prompt}")
-    print(f"Sleeping for {seconds} seconds...")
+    try:
+        child = pexpect.spawn(
+            f"mg5_aMC {script_path}",
+            encoding="utf-8",
+            timeout=None,
+        )
+        child.logfile = sys.stdout
+        child.expect(pexpect.EOF)
+    except Exception as e:
+        return {"status": "failed", "error": str(e)}
 
-    # You can replace this sleep call with your own Python code
-    time.sleep(seconds)
+    child.close()
 
-    return prompt
+    directory_contents = os.listdir(".")
+
+    return {
+        "status": "success",
+        "job_id": job_id,
+        "commands": commands,
+        "pwd": os.getcwd(),
+        "directory_contents": directory_contents,
+    }
 
 
-# Start the Serverless function when the script is run
 if __name__ == "__main__":
     runpod.serverless.start({"handler": handler})
