@@ -61,7 +61,7 @@ def handler(event: dict):
         key=S3_ACCESS_KEY_ID,
         secret=S3_SECRET_ACCESS_KEY,
     )
-    s3.put(archive_path, s3_path)
+    s3.put(archive_path, s3_path, ContentType="application/gzip")
 
     return {"output_path": s3_path}
 
