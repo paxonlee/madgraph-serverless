@@ -7,5 +7,6 @@ requires-python = ">=3.12"
 dependencies = [
   "fastapi",
   "pexpect",
+  "s3fs>=2026.3.0",
   "uvicorn",
 ]
