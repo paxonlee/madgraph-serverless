@@ -31,6 +31,7 @@ def handler(event: dict):
     with open(script_path, "w") as f:
         f.write("\n".join(commands))
 
+    child = None
     try:
         child = pexpect.spawn(
             f"mg5_aMC {script_path}",
@@ -42,24 +43,27 @@ def handler(event: dict):
     except Exception as e:
         return {"error": str(e)}
     finally:
-        child.close()
+        if child is not None:
+            child.close()
 
-    if os.path.exists(output_path):
-        archive_path = f"{output_path}.tar.gz"
-        print(f"Compressing {output_path} to {archive_path}")
-        with tarfile.open(archive_path, "w:gz") as tar:
-            tar.add(output_path, arcname=output_path)
+    if not os.path.exists(output_path):
+        return {"error": f"Output path '{output_path}' not found after execution"}
 
-        print(f"Uploading {archive_path} to {S3_BUCKET}/{archive_path}")
-        s3 = s3fs.S3FileSystem(
-            endpoint_url=S3_ENDPOINT,
-            access_key_id=S3_ACCESS_KEY_ID,
-            secret_access_key=S3_ACCESS_KEY_SECRET,
-            bucket_name=S3_BUCKET,
-        )
-        s3.put(archive_path, f"{S3_BUCKET}/{archive_path}")
+    archive_path = f"{output_path}.tar.gz"
+    print(f"Compressing {output_path} to {archive_path}")
+    with tarfile.open(archive_path, "w:gz") as tar:
+        tar.add(output_path, arcname=output_path)
 
-    return {"s3_path": f"{S3_BUCKET}/{archive_path}"}
+    s3_path = f"{S3_BUCKET}/{archive_path}"
+    print(f"Uploading {archive_path} to {s3_path}")
+    s3 = s3fs.S3FileSystem(
+        endpoint_url=S3_ENDPOINT,
+        key=S3_ACCESS_KEY_ID,
+        secret=S3_ACCESS_KEY_SECRET,
+    )
+    s3.put(archive_path, s3_path)
+
+    return {"output_path": s3_path}
 
 
 if __name__ == "__main__":
