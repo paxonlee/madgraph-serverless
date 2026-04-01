@@ -4,4 +4,8 @@ version = "0.1.0"
 description = "Run MadGraph5_aMC@NLO on Runpod Serverless"
 readme = "README.md"
 requires-python = ">=3.12"
-dependencies = []
+dependencies = [
+  "fastapi",
+  "pexpect",
+  "uvicorn",
+]
