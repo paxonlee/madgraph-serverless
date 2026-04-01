@@ -6,9 +6,9 @@ import pexpect
 import runpod
 import s3fs
 
-S3_ENDPOINT = os.getenv("CLOUDFLARE_R2_ENDPOINT")
-S3_ACCESS_KEY_ID = os.getenv("CLOUDFLARE_R2_ACCESS_KEY_ID")
-S3_ACCESS_KEY_SECRET = os.getenv("CLOUDFLARE_R2_ACCESS_KEY_SECRET")
+S3_ENDPOINT = os.getenv("ENDPOINT")
+S3_ACCESS_KEY_ID = os.getenv("ACCESS_KEY_ID")
+S3_SECRET_ACCESS_KEY = os.getenv("SECRET_ACCESS_KEY")
 S3_BUCKET = "public/collisions"
 
 
@@ -59,7 +59,7 @@ def handler(event: dict):
     s3 = s3fs.S3FileSystem(
         endpoint_url=S3_ENDPOINT,
         key=S3_ACCESS_KEY_ID,
-        secret=S3_ACCESS_KEY_SECRET,
+        secret=S3_SECRET_ACCESS_KEY,
     )
     s3.put(archive_path, s3_path)
 
