@@ -63,12 +63,15 @@ def handler(event: dict):
 
     s3_path = f"{S3_BUCKET}/{archive_path}"
     print(f"Uploading {archive_path} to {s3_path}")
-    s3 = s3fs.S3FileSystem(
-        endpoint_url=S3_ENDPOINT,
-        key=S3_ACCESS_KEY_ID,
-        secret=S3_SECRET_ACCESS_KEY,
-    )
-    s3.put(archive_path, s3_path, ContentType="application/gzip")
+    try:
+        s3 = s3fs.S3FileSystem(
+            endpoint_url=S3_ENDPOINT,
+            key=S3_ACCESS_KEY_ID,
+            secret=S3_SECRET_ACCESS_KEY,
+        )
+        s3.put(archive_path, s3_path, ContentType="application/gzip")
+    except Exception as e:
+        return {"error": f"Failed to upload to S3: {str(e)}"}
 
     return {"output_path": s3_path}
 
