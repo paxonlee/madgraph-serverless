@@ -1038,7 +1038,7 @@ dependencies = [
 
 [package.metadata]
 requires-dist = [
-    { name = "pexpect" },
+    { name = "pexpect", specifier = ">=4.9.0" },
     { name = "runpod", specifier = ">=1.8.2" },
     { name = "s3fs", specifier = ">=2026.3.0" },
 ]
