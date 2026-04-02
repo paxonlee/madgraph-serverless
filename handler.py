@@ -9,7 +9,7 @@ import s3fs
 S3_ENDPOINT = os.getenv("ENDPOINT")
 S3_ACCESS_KEY_ID = os.getenv("ACCESS_KEY_ID")
 S3_SECRET_ACCESS_KEY = os.getenv("SECRET_ACCESS_KEY")
-S3_BUCKET = "public/collisions"
+S3_BUCKET = os.getenv("BUCKET")
 
 
 def handler(event: dict):
