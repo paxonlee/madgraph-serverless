@@ -6,8 +6,9 @@
   "iconUrl": "https://public.startown.ai/avatars/madgraph.png",
   "config": {
     "runsOn": "CPU",
+    "endpointType": "QUEUE",
     "cpuFlavor": "cpu5c-32-64",
-    "containerDiskInGb": 20,
+    "containerDiskInGb": 200,
     "env": [
       {
         "key": "ENDPOINT",
