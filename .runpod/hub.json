@@ -13,8 +13,7 @@
         "input": {
           "name": "S3 Endpoint URL",
           "type": "string",
-          "description": "Endpoint URL of your S3-compatible storage (e.g. Cloudflare R2, AWS S3)",
-          "required": true
+          "description": "Endpoint URL of your S3-compatible storage (e.g. Cloudflare R2, AWS S3)"
         }
       },
       {
@@ -22,8 +21,7 @@
         "input": {
           "name": "S3 Access Key ID",
           "type": "string",
-          "description": "Access key ID for your S3-compatible storage",
-          "required": true
+          "description": "Access key ID for your S3-compatible storage"
         }
       },
       {
@@ -31,8 +29,7 @@
         "input": {
           "name": "S3 Secret Access Key",
           "type": "string",
-          "description": "Secret access key for your S3-compatible storage",
-          "required": true
+          "description": "Secret access key for your S3-compatible storage"
         }
       },
       {
@@ -40,8 +37,7 @@
         "input": {
           "name": "S3 Bucket",
           "type": "string",
-          "description": "Name of the S3 bucket where simulation output will be uploaded",
-          "required": true
+          "description": "Name of the S3 bucket where simulation output will be uploaded"
         }
       }
     ]
