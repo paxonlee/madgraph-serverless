@@ -1,0 +1,49 @@
+{
+  "title": "MadGraph5_aMC@NLO",
+  "description": "Run MadGraph5_aMC@NLO on Runpod Serverless and upload output to S3-compatible storage.",
+  "type": "serverless",
+  "category": "language",
+  "config": {
+    "runsOn": "CPU",
+    "cpuFlavor": "cpu5c-32-64",
+    "containerDiskInGb": 200,
+    "env": [
+      {
+        "key": "ENDPOINT",
+        "input": {
+          "name": "S3 Endpoint URL",
+          "type": "string",
+          "description": "Endpoint URL of your S3-compatible storage (e.g. Cloudflare R2, AWS S3)",
+          "required": true
+        }
+      },
+      {
+        "key": "ACCESS_KEY_ID",
+        "input": {
+          "name": "S3 Access Key ID",
+          "type": "string",
+          "description": "Access key ID for your S3-compatible storage",
+          "required": true
+        }
+      },
+      {
+        "key": "SECRET_ACCESS_KEY",
+        "input": {
+          "name": "S3 Secret Access Key",
+          "type": "string",
+          "description": "Secret access key for your S3-compatible storage",
+          "required": true
+        }
+      },
+      {
+        "key": "BUCKET",
+        "input": {
+          "name": "S3 Bucket",
+          "type": "string",
+          "description": "Name of the S3 bucket where simulation output will be uploaded",
+          "required": true
+        }
+      }
+    ]
+  }
+}

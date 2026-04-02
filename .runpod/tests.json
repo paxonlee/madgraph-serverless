@@ -1,0 +1,23 @@
+{
+  "tests": [
+    {
+      "name": "pp2tt-1k",
+      "input": {
+        "commands": [
+          "generate p p > t t~",
+          "output pp2tt-1k",
+          "launch",
+          "shower=pythia8",
+          "detector=delphes",
+          "done",
+          "set nevents 1000",
+          "done"
+        ]
+      },
+      "timeout": 300
+    }
+  ],
+  "config": {
+    "cpuFlavor": "cpu5c-32-64"
+  }
+}
