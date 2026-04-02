@@ -19,23 +19,24 @@ def handler(event: dict):
     if not commands:
         return {"error": "No commands provided"}
 
-    santinized_commands = []
+    sanitized_commands = []
     for command in commands:
-        if command.startswith("!"):
+        command = " ".join(command.split())
+        if not command or command.startswith("!"):
             continue
-        santinized_commands.append(command)
+        sanitized_commands.append(command)
 
     output_path = None
-    for santinized_command in santinized_commands:
-        if santinized_command.startswith("output"):
-            output_path = santinized_command.split(" ")[1]
+    for sanitized_command in sanitized_commands:
+        if sanitized_command.startswith("output"):
+            output_path = sanitized_command.split(" ")[1]
             break
     if not output_path:
         return {"error": "No output path provided"}
 
     script_path = "commands.mg5"
     with open(script_path, "w") as f:
-        f.write("\n".join(santinized_commands))
+        f.write("\n".join(sanitized_commands))
 
     child = None
     try:
