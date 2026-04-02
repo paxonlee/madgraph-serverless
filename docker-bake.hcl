@@ -47,7 +47,7 @@ target "madgraph" {
 }
 
 target "madgraph-serverless" {
-  tags       = ["startown/madgraph-serverless:0.1.10"]
+  tags       = ["startown/madgraph-serverless:0.1.11"]
   platforms  = ["linux/amd64"]
   attest     = ["type=provenance", "type=sbom"]
   output     = ["type=registry"]

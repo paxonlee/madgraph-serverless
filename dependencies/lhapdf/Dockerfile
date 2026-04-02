@@ -12,6 +12,12 @@ RUN PYTHON=python3 ./configure --prefix=/opt/lhapdf && \
     make -j$(nproc) && \
     make install
 
+RUN ln -s /usr/bin/python3 /usr/local/bin/python && \
+    PATH=/opt/lhapdf/bin:${PATH} \
+    LD_LIBRARY_PATH=/opt/lhapdf/lib \
+    PYTHONPATH=/opt/lhapdf/lib/python3.12/dist-packages \
+    lhapdf install NNPDF23_lo_as_0130_qed
+
 # Runner --------------------------------------------------------------------- #
 FROM ubuntu:24.04 AS runner
 
