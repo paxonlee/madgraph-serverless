@@ -10,11 +10,11 @@
           "shower=pythia8",
           "detector=delphes",
           "done",
-          "set nevents 1000",
+          "set nevents 100",
           "done"
         ]
       },
-      "timeout": 300
+      "timeout": 60000
     }
   ],
   "config": {
