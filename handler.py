@@ -61,6 +61,10 @@ def handler(event: dict):
     with tarfile.open(archive_path, "w:gz") as tar:
         tar.add(output_path, arcname=output_path)
 
+    if not all([S3_ENDPOINT, S3_ACCESS_KEY_ID, S3_SECRET_ACCESS_KEY, S3_BUCKET]):
+        print("S3 credentials not configured, skipping upload")
+        return {"output_path": archive_path}
+
     s3_path = f"{S3_BUCKET}/{archive_path}"
     print(f"Uploading {archive_path} to {s3_path}")
     try:
