@@ -3,6 +3,7 @@
   "description": "Run MadGraph5_aMC@NLO on Runpod Serverless and upload output to S3-compatible storage.",
   "type": "serverless",
   "category": "language",
+  "iconUrl": "https://public.startown.ai/avatars/madgraph.png",
   "config": {
     "runsOn": "CPU",
     "cpuFlavor": "cpu5c-32-64",
