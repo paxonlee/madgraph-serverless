@@ -1,11 +1,15 @@
 [project]
 name = "madgraph-serverless"
-version = "0.1.9"
+version = "0.1.10"
 description = "Run MadGraph5_aMC@NLO on Runpod Serverless"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
+  "cryptography>=46.0.5",
   "pexpect>=4.9.0",
   "runpod>=1.8.2",
   "s3fs>=2026.3.0",
 ]
+
+[tool.uv]
+override-dependencies = ["cryptography>=46.0.5"]
