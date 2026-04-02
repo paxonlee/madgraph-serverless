@@ -7,7 +7,7 @@
   "config": {
     "runsOn": "CPU",
     "cpuFlavor": "cpu5c-32-64",
-    "containerDiskInGb": 200,
+    "containerDiskInGb": 20,
     "env": [
       {
         "key": "ENDPOINT",
