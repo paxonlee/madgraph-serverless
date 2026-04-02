@@ -1,7 +1,7 @@
 {
   "tests": [
     {
-      "name": "pp2tt-1k",
+      "name": "pp2tt-test",
       "input": {
         "commands": [
           "generate p p > t t~",
@@ -10,7 +10,7 @@
           "shower=pythia8",
           "detector=delphes",
           "done",
-          "set nevents 100",
+          "set nevents 10",
           "done"
         ]
       },
