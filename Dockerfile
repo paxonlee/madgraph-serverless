@@ -6,10 +6,10 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 
 WORKDIR /work
-COPY handler.py handler.py
+COPY rp_handler.py rp_handler.py
 COPY pyproject.toml pyproject.toml
 RUN pip3 install --break-system-packages uv && \
     uv pip install --system --break-system-packages .
 
 ENTRYPOINT []
-CMD ["python3", "-u", "handler.py"]
+CMD ["python3", "-u", "rp_handler.py"]
