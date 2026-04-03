@@ -1,6 +1,7 @@
 # MadGraph Serverless
 
-[![Runpod](https://api.runpod.io/badge/paxonlee/madgraph-serverless)](https://console.runpod.io/hub/paxonlee/madgraph-serverless)
+[![Deploy on Runpod](https://flat.badgen.net/badge/runpod/Deploy%20on%20Runpod/602CF0/?icon=https://public.startown.ai/icons/runpod-white.svg&label)](https://console.runpod.io/hub/paxonlee/madgraph-serverless)
+![Image size](https://flat.badgen.net/docker/size/startown/madgraph-serverless/0.1.12/amd64/?icon=docker&label=Image%20size)
 
 MadGraph5_aMC@NLO is a widely used tool in high energy physics (HEP) for simulating particle collisions. Setting up its runtime environment -- Pythia, Delphes, LHAPDF, ROOT, and others -- can be tricky. Once running, individual simulations are CPU-intensive, long-running, and consume large disk space.
 
