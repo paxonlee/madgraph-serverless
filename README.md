@@ -37,7 +37,7 @@ The workers accepts only one parameter `commands`. You request body should look 
   "input": {
     "commands": [
       "generate p p > w+ w-, w+ > j j, w- > j j",
-      "output pp2ww_w2jj_w2jj-10k",
+      "output pp2ww_w2jj_w2jj-1k-42",
       "launch",
       "shower=pythia8",
       "detector=delphes",
@@ -46,7 +46,7 @@ The workers accepts only one parameter `commands`. You request body should look 
       "set ebeam 7000",
       "set htjmin 300",
       "set htjmax 400",
-      "set nevents 10000",
+      "set nevents 1000",
       "add pythia8_card Random:setSeed = on",
       "add pythia8_card Random:seed = 42",
       "add delphes_card --line_position=0 set RandomSeed 42",
