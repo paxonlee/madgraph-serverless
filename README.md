@@ -31,6 +31,18 @@ This project packages MadGraph and its common dependencies into a Docker image a
  6.5.5
 ```
 
+MadGraph integrates all of these components into a single simulation pipeline -- from matrix element calculation, through parton showering and hadronization, to detector response simulation.
+
+- [HepMC](https://hepmc.web.cern.ch/hepmc/): C++ event record library for Monte Carlo generators representing particle-level events (`.hepmc` file).
+- [zlib](https://zlib.net/): General-purpose lossless data-compression library.
+- [ROOT](https://root.cern/): Open-source data analysis framework used across HEP.
+- [eMELA](https://github.com/gstagnit/eMELA): Library for quantum electrodynamics (QED) evolution of lepton parton distribution functions (PDFs) at next-to-leading logarithmic (NLL) accuracy.
+- [FastJet](https://fastjet.fr/): Package for jet finding in $pp$ and $e^+ e^-$ collisions.
+- [LHAPDF](https://lhapdf.hepforge.org/): Standard library for evaluating PDFs.
+- [Pythia](https://www.pythia.org/): General-purpose Monte Carlo event generator for high-energy collisions, handling parton showers, fragmentation, and decay.
+- [Delphes](https://delphes.github.io/): Fast detector response simulation, producing reconstruction-level events (`.root` file).
+- [MadGraph5_aMC@NLO](https://launchpad.net/mg5amcnlo): Framework for simulating particle physics processes, producing parton-level events (`.lhe` file).
+
 ## Usage
 
 The workers accepts only one parameter `commands`. You request body should look like:
