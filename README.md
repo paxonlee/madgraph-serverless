@@ -47,9 +47,9 @@ MadGraph integrates all of these components into a single simulation pipeline --
 
 ### 1. Create the endpoint
 
-> **Shortcut:** Click the **Deploy on Runpod** badge at the top of this page to pre-fill the deployment form — then skip ahead to [step 2](#2-wait-for-workers).
+> **Shortcut:** Click the **Deploy on Runpod** badge at the top of this page to pre-fill the deployment form -- then skip ahead to [step 2](#2-wait-for-workers).
 
-From the RunPod console, go to **Serverless** and click **New endpoint**. Select **Custom deployment**, then **Deploy from Docker registry**.
+From the Runpod console, go to **Serverless** and click **New endpoint**. Select **Custom deployment**, then **Deploy from Docker registry**.
 
 ![](assets/1-home.png)
 ![](assets/2-serverless.png)
@@ -99,10 +99,10 @@ Click **Manage > Edit endpoint** to adjust the auto-scaling strategy. **Request 
 ![](assets/18-run.png)
 ![](assets/19-new-request.png)
 
-**Via the API:** You can submit runs programmatically using the RunPod REST API. Replace `{endpoint_id}` and `{api_key}` with your values from the RunPod console.
+**Via the API:** You can submit runs programmatically using the Runpod REST API. Replace `{endpoint_id}` and `{api_key}` with your values from the Runpod console.
 
 ```bash
-curl -X POST https://api.runpod.ai/v2/{endpoint_id}/run \
+curl -X POST "https://api.runpod.io/v2/{endpoint_id}/run" \
   -H "Authorization: Bearer {api_key}" \
   -H "Content-Type: application/json" \
   -d '{
@@ -142,7 +142,46 @@ When a run completes, the response includes the output path. The simulation outp
 
 ## Usage
 
-The workers accepts only one parameter `commands`. You request body should look like:
+The worker accepts a single parameter `commands`: a list of strings that maps directly to what you would type into MadGraph's interactive CLI, in order. The flow has four phases:
+
+**1. Define the process**
+
+```
+"generate [process]"   # hard process in MadGraph syntax
+"output [name]"        # name of the output directory and output .tar.gz
+```
+
+**2. Configure the run**
+
+```
+"launch"
+"shower=pythia8"       # optional: enable parton shower (pythia8)
+"detector=delphes"     # optional: enable detector simulation (delphes)
+"done"                 # confirm component selection
+```
+
+**3. Set run card parameters**
+
+```
+"set iseed 42"         # random seed for the matrix element generator
+"set ebeam 7000"       # beam energy in GeV (per beam)
+"set nevents 1000"     # number of events to generate
+"set htjmin 300"       # example kinematic cut (min HT of jets in GeV)
+```
+
+Any parameter accepted by MadGraph's `run_card.dat` can be set here.
+
+**4. Inject card settings**
+
+```
+"add pythia8_card [setting]"                          # append a line to the Pythia8 card
+"add delphes_card [--line_position=N] [setting]"      # append a line to the Delphes card
+"done"                                                # start the run
+```
+
+Use `--line_position=0` to prepend instead of append.
+
+**Full example**
 
 ```json
 {
