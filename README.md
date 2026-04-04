@@ -43,6 +43,103 @@ MadGraph integrates all of these components into a single simulation pipeline --
 - [Delphes](https://delphes.github.io/): Fast detector response simulation, producing reconstruction-level events (`.root` file).
 - [MadGraph5_aMC@NLO](https://launchpad.net/mg5amcnlo): Framework for simulating particle physics processes, producing parton-level events (`.lhe` file).
 
+## Quickstart
+
+### 1. Create the endpoint
+
+> **Shortcut:** Click the **Deploy on Runpod** badge at the top of this page to pre-fill the deployment form — then skip ahead to [step 2](#2-wait-for-workers).
+
+From the RunPod console, go to **Serverless** and click **New endpoint**. Select **Custom deployment**, then **Deploy from Docker registry**.
+
+![](assets/1-home.png)
+![](assets/2-serverless.png)
+![](assets/3-new-endpoint.png)
+![](assets/4-custom-deployment.png)
+![](assets/5-deploy-from-docker-registry.png)
+
+Enter the Docker image `startown/madgraph-serverless:0.1.12`. Name your endpoint, set the worker type to **CPU**, and choose a CPU configuration. Set the container disk to at least **200 GB** -- MadGraph simulations generate large intermediate files.
+
+![](assets/6-enter-docker-image.png)
+![](assets/7-configure-endpoint.png)
+![](assets/8-configure-container.png)
+
+Add the following environment variables for storing output files to S3-compatible storage (e.g. Cloudflare R2):
+
+- `ENDPOINT` -- your storage endpoint URL
+- `ACCESS_KEY_ID` -- your access key
+- `SECRET_ACCESS_KEY` -- your secret key
+- `BUCKET` -- the bucket name
+
+Click **Create endpoint**.
+
+![](assets/9-set-environment-variables.png)
+![](assets/10-create-endpoints.png)
+
+### 2. Wait for workers
+
+Workers will initialize and pull the Docker image. Once the status shows **Ready**, the endpoint is live.
+
+![](assets/11-workers-initializing.png)
+![](assets/12-workers-ready.png)
+
+### 3. Configure auto-scaling (optional)
+
+Click **Manage > Edit endpoint** to adjust the auto-scaling strategy. **Request count** with 1 request per worker works well for MadGraph since each simulation fully occupies a worker.
+
+![](assets/13-edit-endpoint.png)
+![](assets/14-request-count.png)
+![](assets/15-save-endpoint.png)
+
+### 4. Submit a run
+
+**Via the console:** Go to the **Requests** tab, paste your request body, and click **Run**. The request enters the queue and is picked up by an available worker.
+
+![](assets/16-requests.png)
+![](assets/17-request-body.png)
+![](assets/18-run.png)
+![](assets/19-new-request.png)
+
+**Via the API:** You can submit runs programmatically using the RunPod REST API. Replace `{endpoint_id}` and `{api_key}` with your values from the RunPod console.
+
+```bash
+curl -X POST https://api.runpod.ai/v2/{endpoint_id}/run \
+  -H "Authorization: Bearer {api_key}" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "input": {
+      "commands": [
+        "generate p p > w+ w-, w+ > j j, w- > j j",
+        "output pp2ww_w2jj_w2jj-1k-42",
+        "launch",
+        "shower=pythia8",
+        "detector=delphes",
+        "done",
+        "set iseed 42",
+        "set ebeam 7000",
+        "set nevents 1000",
+        "done"
+      ]
+    }
+  }'
+```
+
+You can submit multiple requests at once -- each one runs on a separate worker in parallel. When doing so, give each request a unique output name to avoid collisions in your storage bucket. For example, append `-1`, `-2`, `-3` to the output name:
+
+```
+"output pp2ww_w2jj_w2jj-1k-42-1"   # request 1
+"output pp2ww_w2jj_w2jj-1k-42-2"   # request 2
+"output pp2ww_w2jj_w2jj-1k-42-3"   # request 3
+```
+
+![](assets/20-3-runs.png)
+
+### 5. Get your results
+
+When a run completes, the response includes the output path. The simulation output is uploaded as a `.tar.gz` file to your configured storage bucket.
+
+![](assets/21-output.png)
+![](assets/22-storage.png)
+
 ## Usage
 
 The workers accepts only one parameter `commands`. You request body should look like:
